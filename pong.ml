@@ -27,6 +27,7 @@ let quit_game text gp =
   Graphics.moveto 300 300;
   Graphics.set_text_size 20;
   Graphics.draw_string text;
+  Graphics.synchronize ();
   Unix.sleepf 2.0;
   exit 0;;
 
@@ -73,6 +74,7 @@ let move_ball {x;y;r;angle} diff (bar1:bar) (bar2:bar) gp =
 
 (*draws bars and ball*)
 let update_gui gp (first:bar) (second:bar) (ball:ball)=
+  Graphics.auto_synchronize false;
   Graphics.clear_graph ();
   Graphics.set_color Graphics.black;
   Graphics.fill_rect 1 1 gp.x_size gp.y_size;
@@ -81,8 +83,7 @@ let update_gui gp (first:bar) (second:bar) (ball:ball)=
   Graphics.fill_rect second.x second.y second.width second.height;
   Graphics.set_color Graphics.red;
   Graphics.fill_circle ball.x ball.y ball.r;
-  Graphics.synchronize ()
-  ;; 
+  Graphics.synchronize ();; 
 
 (*game manager*)
 let rec game gp =
