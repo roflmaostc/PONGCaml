@@ -11,5 +11,5 @@ Execution via:
 ```bash
 ./pong.native
 ```
-The bar is moved via **l** and **r**.
+The bar is moved via **a** and **d**.
 
