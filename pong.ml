@@ -85,11 +85,11 @@ let rec game gp =
   let ball = {x=200; y=200; r=10; angle=90.0} in
   update_gui gp bar1 bar2 ball;
   let rec aux bar1 bar2 ball =
-    let bar1 = move_bar bar1 10 gp  in
-    let bar2 = move_cpu bar2 10 gp ball in
+    let bar1 = move_bar bar1 8 gp  in
+    let bar2 = move_cpu bar2 8 gp ball in
     let ball = move_ball ball 10 bar1 bar2 gp in
     update_gui gp bar1 bar2 ball;
-    Unix.sleepf 0.01; aux bar1 bar2 ball in
+    Unix.sleepf 0.02; aux bar1 bar2 ball in
   aux bar1 bar2 ball;;
   
 let () = game ({x_size=800; y_size=800})

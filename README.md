@@ -11,11 +11,10 @@ Adjusting can be done with:
 ```bash
 xset r rate 250 60
 ```
-First argument is delay, second is refresh rate. 100 for both is good. 
+First argument is delay, second is refresh rate. 100 for delay and 70 for refresh rate is good. 
 
 Execution via:
 ```bash
 ./pong.native
 ```
 The bar is moved via **a** and **d**.
-
