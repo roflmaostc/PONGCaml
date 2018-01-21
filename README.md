@@ -11,7 +11,7 @@ Adjusting can be done with:
 ```bash
 xset r rate 250 60
 ```
-First argument is delay, second is refresh rate. 100 for delay and 70 for refresh rate is good. 
+First argument is delay, second is refresh rate. 100 for delay and 50 for refresh rate is good. 
 
 Execution via:
 ```bash

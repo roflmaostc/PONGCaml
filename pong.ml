@@ -29,6 +29,9 @@ let quit_game text =
 
 
 let move_cpu (bar:bar) diff gp (ball:ball)= 
+  if ball.angle>=180.0 then
+    bar
+  else
     let key =(if ball.x>bar.x+bar.width-bar.width/5 then 'd' else if ball.x<bar.x+bar.width/5 then 'a' else 'k') in
     if key = 'd' then
       if bar.x+bar.width+diff>gp.x_size then bar
@@ -48,11 +51,11 @@ let move_ball {x;y;r;angle} diff (bar1:bar) (bar2:bar) gp =
   let x_new = x + (((float_of_int diff)*.(cos (angle*.2.0*.3.1415/.360.0))) |> int_of_float)  in 
   let y_new = y + (((float_of_int diff)*.(sin (angle*.2.0*.3.1415/.360.0))) |> int_of_float)  in
   if y_new <= bar1.height then
-    if bar1.x<=x && x<=bar1.x+bar1.width then
+    if bar1.x-2<=x && x<=bar1.x+bar1.width+2 then
       {x=x_new;y=y_new+5; r=r; angle=new_angle (360.0-.angle) bar1.width (x-bar1.x) }
     else quit_game "You lost!"
   else if y_new >= gp.y_size-bar1.height then
-    if bar2.x<=x && x<=bar2.x+bar2.width then
+    if bar2.x-2<=x && x<=bar2.x+bar2.width+2 then
       {x=x_new;y=y_new-5; r=r; angle=360.0-.(new_angle angle bar2.width (x-bar2.x))}
     else quit_game "You win!"
   else if x_new<=0 then {x=x; y=y; r=r; 
