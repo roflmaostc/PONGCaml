@@ -3,7 +3,33 @@ type gp = {x_size: int; y_size:int}
 (*stores bar*)
 type bar = {x:int; y:int; height: int; width: int}
 type ball = {x:int; y:int; r:int; angle: float}
-(*moves bar *)
+
+(*quit message*)
+let quit_game text gp = 
+  Graphics.clear_graph ();
+  Graphics.set_color Graphics.black;
+  Graphics.fill_rect 1 1 gp.x_size gp.y_size;
+  Graphics.set_color Graphics.white;
+  Graphics.moveto 300 300;
+  Graphics.set_text_size 20;
+  Graphics.draw_string text;
+  Graphics.synchronize ();
+  Unix.sleepf 2.0;
+  exit 0;;
+
+(*draws bars and ball*)
+let update_gui gp (first:bar) (second:bar) (ball:ball)=
+  Graphics.auto_synchronize false;
+  Graphics.clear_graph ();
+  Graphics.set_color Graphics.black;
+  Graphics.fill_rect 1 1 gp.x_size gp.y_size;
+  Graphics.set_color Graphics.green;
+  Graphics.fill_rect first.x first.y first.width first.height; 
+  Graphics.fill_rect second.x second.y second.width second.height;
+  Graphics.set_color Graphics.red;
+  Graphics.fill_circle ball.x ball.y ball.r;
+  Graphics.synchronize ();; 
+
 
 let move_bar (bar:bar) diff gp =
   let module G = Graphics in
@@ -19,19 +45,7 @@ let move_bar (bar:bar) diff gp =
   else bar;;
 
 
-let quit_game text gp = 
-  Graphics.clear_graph ();
-  Graphics.set_color Graphics.black;
-  Graphics.fill_rect 1 1 gp.x_size gp.y_size;
-  Graphics.set_color Graphics.white;
-  Graphics.moveto 300 300;
-  Graphics.set_text_size 20;
-  Graphics.draw_string text;
-  Graphics.synchronize ();
-  Unix.sleepf 2.0;
-  exit 0;;
-
-
+(*Move CPU bar with following x pos of ball*)
 let move_cpu (bar:bar) diff gp (ball:ball)= 
   if ball.angle>=180.0 then
     bar
@@ -50,7 +64,7 @@ let new_angle angle width pos =
   if angle >=180.0 then 190.0 +. ( (float_of_int width) -. (float_of_int pos) )/.(float_of_int width)*.160.0
   else ((float_of_int width) -. (float_of_int pos))/.(float_of_int width)*.160.0 +. 10.
        
-(*propagates ball*)
+(*propagates balls, considers reflections and decides if someone lost*)
 let move_ball {x;y;r;angle} diff (bar1:bar) (bar2:bar) gp = 
   let x_new = x + (((float_of_int diff)*.(cos (angle*.2.0*.3.1415/.360.0))) |> int_of_float)  in 
   let y_new = y + (((float_of_int diff)*.(sin (angle*.2.0*.3.1415/.360.0))) |> int_of_float)  in
@@ -72,18 +86,6 @@ let move_ball {x;y;r;angle} diff (bar1:bar) (bar2:bar) gp =
                           else angle} 
   else {x=x_new; y=y_new; r=r; angle=angle};;
 
-(*draws bars and ball*)
-let update_gui gp (first:bar) (second:bar) (ball:ball)=
-  Graphics.auto_synchronize false;
-  Graphics.clear_graph ();
-  Graphics.set_color Graphics.black;
-  Graphics.fill_rect 1 1 gp.x_size gp.y_size;
-  Graphics.set_color Graphics.green;
-  Graphics.fill_rect first.x first.y first.width first.height; 
-  Graphics.fill_rect second.x second.y second.width second.height;
-  Graphics.set_color Graphics.red;
-  Graphics.fill_circle ball.x ball.y ball.r;
-  Graphics.synchronize ();; 
 
 (*game manager*)
 let rec game gp =
@@ -95,12 +97,14 @@ let rec game gp =
   let bar1 = {x=300; y=2; width=100; height=20} in
   let ball = {x=200; y=200; r=10; angle=90.0} in
   update_gui gp bar1 bar2 ball;
-  let rec aux bar1 bar2 ball =
+  (*main loo*)
+  let rec main bar1 bar2 ball =
     let bar1 = move_bar bar1 8 gp  in
     let bar2 = move_cpu bar2 8 gp ball in
     let ball = move_ball ball 10 bar1 bar2 gp in
     update_gui gp bar1 bar2 ball;
-    Unix.sleepf 0.02; aux bar1 bar2 ball in
-  aux bar1 bar2 ball;;
+    Unix.sleepf 0.02; 
+    main bar1 bar2 ball in
+  main bar1 bar2 ball;;
   
 let () = game ({x_size=800; y_size=800})
