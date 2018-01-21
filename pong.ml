@@ -19,8 +19,11 @@ let move_bar (bar:bar) diff gp =
   else bar;;
 
 
-let quit_game text = 
+let quit_game text gp = 
   Graphics.clear_graph ();
+  Graphics.set_color Graphics.black;
+  Graphics.fill_rect 1 1 gp.x_size gp.y_size;
+  Graphics.set_color Graphics.white;
   Graphics.moveto 300 300;
   Graphics.set_text_size 20;
   Graphics.draw_string text;
@@ -53,11 +56,11 @@ let move_ball {x;y;r;angle} diff (bar1:bar) (bar2:bar) gp =
   if y_new <= bar1.height then
     if bar1.x-2<=x && x<=bar1.x+bar1.width+2 then
       {x=x_new;y=y_new+5; r=r; angle=new_angle (360.0-.angle) bar1.width (x-bar1.x) }
-    else quit_game "You lost!"
+    else quit_game "You loose!" gp
   else if y_new >= gp.y_size-bar1.height then
     if bar2.x-2<=x && x<=bar2.x+bar2.width+2 then
       {x=x_new;y=y_new-5; r=r; angle=360.0-.(new_angle angle bar2.width (x-bar2.x))}
-    else quit_game "You win!"
+    else quit_game "You win!" gp
   else if x_new<=0 then {x=x+2; y=y; r=r; 
                     angle=if angle>=90.0 && angle <=180.0 then 180.0-.angle 
                           else if 270.0>=angle && angle>=180.0 then 540.0-.angle
@@ -72,15 +75,19 @@ let move_ball {x;y;r;angle} diff (bar1:bar) (bar2:bar) gp =
 let update_gui gp (first:bar) (second:bar) (ball:ball)=
   Graphics.clear_graph ();
   Graphics.set_color Graphics.black;
-  Graphics.draw_rect 1 1 gp.x_size gp.y_size;
+  Graphics.fill_rect 1 1 gp.x_size gp.y_size;
   Graphics.set_color Graphics.green;
   Graphics.fill_rect first.x first.y first.width first.height; 
   Graphics.fill_rect second.x second.y second.width second.height;
   Graphics.set_color Graphics.red;
-  Graphics.fill_circle ball.x ball.y ball.r;; 
+  Graphics.fill_circle ball.x ball.y ball.r;
+  Graphics.synchronize ()
+  ;; 
 
 (*game manager*)
 let rec game gp =
+  (*turns off refresh*)
+  Graphics.auto_synchronize false;
   let open Graphics in
   let () = open_graph (" "^(string_of_int gp.x_size)^"x"^(string_of_int gp.y_size)) in
   let bar2 = {x=300; y= 800-20; width=100; height=20} in
