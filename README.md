@@ -18,3 +18,5 @@ Execution via:
 ./pong.native
 ```
 The bar is moved via **a** and **d**.
+
+![](example_pong.png)
