@@ -58,14 +58,14 @@ let move_ball {x;y;r;angle} diff (bar1:bar) (bar2:bar) gp =
     if bar2.x-2<=x && x<=bar2.x+bar2.width+2 then
       {x=x_new;y=y_new-5; r=r; angle=360.0-.(new_angle angle bar2.width (x-bar2.x))}
     else quit_game "You win!"
-  else if x_new<=0 then {x=x; y=y; r=r; 
+  else if x_new<=0 then {x=x+2; y=y; r=r; 
                     angle=if angle>=90.0 && angle <=180.0 then 180.0-.angle 
                           else if 270.0>=angle && angle>=180.0 then 540.0-.angle
-                          else failwith "invalid angle"}  
-  else if x_new >=gp.x_size then {x=x; y=y; r=r; 
+                          else angle}
+  else if x_new >=gp.x_size then {x=x-2; y=y; r=r; 
                           angle=if angle>=0.0 && angle <=90.0 then 180.0-.angle 
                           else if 360.0>=angle && angle>=270.0 then 540.0-.angle
-                          else failwith "invalid angle"} 
+                          else angle} 
   else {x=x_new; y=y_new; r=r; angle=angle};;
 
 (*draws bars and ball*)

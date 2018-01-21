@@ -1,4 +1,4 @@
-Implementation of PONG using [OCaml](http://ocaml.org/). Tested under Linux with OCaml 4.06, Windows may not supported.
+Implementation of PONG using [OCaml](http://ocaml.org/). Tested under Linux with OCaml 4.06, Windows may not be supported.
 
 Compilation is done via:
 ```bash
@@ -17,6 +17,6 @@ Execution via:
 ```bash
 ./pong.native
 ```
-The bar is moved via **a** and **d**.
+The bar can be moved with **a** and **d**.
 
 ![](example_pong.png)
