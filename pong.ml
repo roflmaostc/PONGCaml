@@ -93,9 +93,9 @@ let rec game gp =
   Graphics.auto_synchronize false;
   let open Graphics in
   let () = open_graph (" "^(string_of_int gp.x_size)^"x"^(string_of_int gp.y_size)) in
-  let bar2 = {x=300; y= 800-20; width=100; height=20} in
-  let bar1 = {x=300; y=2; width=100; height=20} in
-  let ball = {x=200; y=200; r=10; angle=90.0} in
+  let bar2 = {x=gp.x_size/2-50; y=gp.y_size-20; width=100; height=20} in
+  let bar1 = {x=gp.x_size/2-50; y=2; width=100; height=20} in
+  let ball = {x=gp.x_size/2; y=gp.y_size/2; r=10; angle=90.0} in
   update_gui gp bar1 bar2 ball;
   (*main loo*)
   let rec main bar1 bar2 ball =
